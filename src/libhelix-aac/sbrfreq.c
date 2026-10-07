@@ -378,7 +378,9 @@ static int CalcFreqNoise(unsigned char *freqNoise, unsigned char *freqLow, int n
 	if (nQ < 1)
 		nQ = 1;
 
-	ASSERT(nQ <= MAX_NUM_NOISE_FLOOR_BANDS);	/* required from 4.6.18.3.6 */
+	/* limit from 4.6.18.3.6; clamp so corrupt headers cannot overrun freqNoise */
+	if (nQ > MAX_NUM_NOISE_FLOOR_BANDS)
+		nQ = MAX_NUM_NOISE_FLOOR_BANDS;
 
 	iLast = 0;
 	freqNoise[0] = freqLow[0];
